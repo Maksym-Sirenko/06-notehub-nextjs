@@ -1,4 +1,5 @@
 // app/page.tsx
+
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ const MainPage = () => {
   return (
     <>
       <h1>Welcome to Main page</h1>
-      <div>Main page</div>;
+      <div>Main page</div>
     </>
   );
 };

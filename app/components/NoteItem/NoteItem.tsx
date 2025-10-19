@@ -1,4 +1,5 @@
-import { Note } from '@/lib/api';
+import { Note } from '@/app/types/note';
+import Link from 'next/link';
 import styles from './NoteItem.module.css';
 
 type Props = {
@@ -7,9 +8,9 @@ type Props = {
 
 const NoteItem = ({ item }: Props) => {
   return (
-    <div className={styles.card}>
-      <p className={styles.title}>{item.title}</p>
-    </div>
+    <li>
+      <Link href={`/notes/${item.id}`}>{item.title}</Link>
+    </li>
   );
 };
 
