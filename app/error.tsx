@@ -1,22 +1,23 @@
 'use client';
-import { error } from 'console';
+
 import css from './error.module.css';
 
 interface Props {
-  message?: string;
-  error: Error;
+  error: Error & { digest?: string };
   reset: () => void;
 }
 
-const ErrorMessage = ({ message = 'Failed to load notes', reset }: Props) => {
+const ErrorMessage = ({ error, reset }: Props) => {
   return (
     <>
-      <p className={css.text} role="alert">
-        {message}
-      </p>
-      <button className={css.button} onClick={reset}>
-        <b>Try again</b>
-      </button>
+      <div className={css.container}>
+        <p className={css.text} role="alert">
+          Could not fetch the list of notes. {error.message}
+        </p>
+        <button className={css.button} onClick={reset}>
+          <b>Try again</b>
+        </button>
+      </div>
     </>
   );
 };

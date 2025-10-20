@@ -1,4 +1,6 @@
-import { Note } from '@/app/types/note';
+// app/components/NoteItem/NoteItem.tsx
+
+import { Note } from '@/types/note';
 import Link from 'next/link';
 import styles from './NoteItem.module.css';
 

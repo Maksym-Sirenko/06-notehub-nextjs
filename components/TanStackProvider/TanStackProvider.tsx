@@ -1,18 +1,16 @@
 // components/TanStackProvider/TanStackProvider.tsx
-
 'use client';
 
-import React, { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import {
   QueryClient,
   QueryClientProvider,
-  dehydrate,
   HydrationBoundary,
   DehydratedState,
 } from '@tanstack/react-query';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
   dehydratedState?: DehydratedState | null;
 };
 
@@ -24,19 +22,17 @@ export default function TanStackProvider({ children, dehydratedState }: Props) {
           queries: {
             retry: 1,
             staleTime: 1000 * 60 * 2,
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
           },
         },
       }),
   );
 
-  const safeState: DehydratedState | undefined =
-    dehydratedState && typeof dehydratedState === 'object'
-      ? (dehydratedState as DehydratedState)
-      : undefined;
-
   return (
     <QueryClientProvider client={queryClient}>
-      <HydrationBoundary state={safeState}>{children}</HydrationBoundary>
+      <HydrationBoundary state={dehydratedState}>{children}</HydrationBoundary>
     </QueryClientProvider>
   );
 }

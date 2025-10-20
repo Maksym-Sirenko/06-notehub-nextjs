@@ -1,7 +1,9 @@
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Note } from '@/app/types/note';
+import type { Note } from '@/types/note';
 import { useState } from 'react';
-import { deleteNote } from '@/app/lib/api';
+import { deleteNote } from '@/lib/api';
 import css from './NoteList.module.css';
 import Link from 'next/link';
 
@@ -9,21 +11,21 @@ interface NoteListProps {
   notes: Note[];
 }
 
-export default function NoteList({ notes }: NoteListProps) {
+const NoteList = ({ notes }: NoteListProps) => {
   const queryClient = useQueryClient();
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => deleteNote(id),
-    onMutate: (id: number) => {
-      setDeletingId(id);
-    },
+    mutationFn: (id: string) => deleteNote(id),
+    onMutate: (id: string) => setDeletingId(id),
     onSettled: () => setDeletingId(null),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
   });
 
-  const handleDelete = (id: number) => {
-    deleteMutation.mutate(id);
+  const handleDelete = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this note?')) {
+      deleteMutation.mutate(id);
+    }
   };
 
   return (
@@ -33,12 +35,15 @@ export default function NoteList({ notes }: NoteListProps) {
           <h2 className={css.title}>{note.title}</h2>
           <p className={css.content}>{note.content}</p>
           <div className={css.footer}>
-            <Link href={`/notes/${note.id}`}>View details</Link>
+            <Link href={`/notes/${note.id}`} className={css.link}>
+              View details
+            </Link>
             <span className={css.tag}>{note.tag}</span>
             <button
               className={css.button}
               aria-label={`Delete note ${note.title}`}
               onClick={() => handleDelete(note.id)}
+              disabled={deletingId === note.id}
             >
               {deletingId === note.id ? 'Deleting...' : 'Delete'}
             </button>
@@ -47,4 +52,6 @@ export default function NoteList({ notes }: NoteListProps) {
       ))}
     </ul>
   );
-}
+};
+
+export default NoteList;

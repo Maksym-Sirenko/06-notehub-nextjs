@@ -1,9 +1,8 @@
 // app/notes/page.tsx
-
-import { QueryClient, dehydrate, DehydratedState } from '@tanstack/react-query';
-import TanStackProvider from '@/app/components/TanStackProvider/TanStackProvider';
-import NotesClient from '@/app/notes/NoteClient';
-import { fetchNotes } from '@/app/lib/api';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
+import NotesClient from './NoteClient';
+import { fetchNotes } from '@/lib/api';
 
 export default async function NotesPage() {
   const queryClient = new QueryClient();
@@ -13,7 +12,7 @@ export default async function NotesPage() {
     queryFn: () => fetchNotes({ search: '', page: 1 }),
   });
 
-  const dehydrated = dehydrate(queryClient) as DehydratedState;
+  const dehydrated = dehydrate(queryClient);
 
   return (
     <TanStackProvider dehydratedState={dehydrated}>

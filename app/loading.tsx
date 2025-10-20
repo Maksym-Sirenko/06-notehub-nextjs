@@ -1,21 +1,18 @@
-import css from './loading.module.css';
+// export default function Loading() {
+//   return <p>Loading, please wait...</p>;
+// }
 
-interface Props {
-  label?: string;
-  size?: number;
-}
-
-const Loader = ({ label = 'Loading…', size = 30 }: Props) => {
+export default function Loading() {
   return (
-    <div className={css.wrap} role="status" aria-live="polite" aria-busy="true">
-      <span
-        className={css.spinner}
-        style={{ width: size, height: size }}
-        aria-hidden="true"
-      />
-      <span className="visually-hidden">{label}</span>
+    <div
+      style={{
+        padding: '50px',
+        textAlign: 'center',
+        fontSize: '18px',
+        color: '#666',
+      }}
+    >
+      🔄 Loading, please wait...
     </div>
   );
-};
-
-export default Loader;
+}

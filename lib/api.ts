@@ -1,6 +1,6 @@
 // lib/api.ts
 import axios from 'axios';
-import type { Note } from '@/app/types/note';
+import type { Note } from '@/types/note';
 
 const API_KEY = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 const PER_PAGE = 12;
@@ -27,6 +27,7 @@ export const fetchNotes = async ({
   page?: number;
   perPage?: number;
 } = {}): Promise<FetchNotesResponse> => {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   const { data } = await axios.get(
     'https://notehub-public.goit.study/api/notes',
     {
@@ -46,20 +47,12 @@ export const createNote = async (newNote: {
   return data as Note;
 };
 
-export const deleteNote = async (noteId: number) => {
+export const deleteNote = async (noteId: string) => {
   const { data } = await NoteService.delete(`/${noteId}`);
   return data as Note;
 };
 
-export const fetchNoteById = async (noteId: number): Promise<Note> => {
-  const { data } = await axios.get(
-    `https://notehub-public.goit.study/api/notes/${noteId}`,
-    {
-      headers: { Authorization: `Bearer ${API_KEY}` },
-    },
-  );
+export const fetchNoteById = async (noteId: string): Promise<Note> => {
+  const { data } = await NoteService.get(`/${noteId}`);
   return data;
 };
-
-export const getNotes = fetchNotes;
-export const getSingleNote = fetchNoteById;
