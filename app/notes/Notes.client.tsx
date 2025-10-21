@@ -9,17 +9,14 @@ import NoteForm from '@/components/NoteForm/NoteForm';
 import Modal from '@/components/Modal/Modal';
 import { fetchNotes } from '@/lib/api';
 import type { FetchNotesResponse } from '@/lib/api';
-import css from './NoteClient.module.css';
+import css from './Notes.client.module.css';
 
 interface Props {
   initialSearch?: string;
   initialPage?: number;
 }
 
-export default function NotesClient({
-  initialSearch = '',
-  initialPage = 1,
-}: Props) {
+const NotesClient = ({ initialSearch = '', initialPage = 1 }: Props) => {
   const [search, setSearch] = useState(initialSearch);
   const [page, setPage] = useState(initialPage);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,7 +52,9 @@ export default function NotesClient({
         <SearchBox value={search} onChange={(e) => setSearch(e.target.value)} />
         <button
           className={css.createButton}
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setIsModalOpen(true);
+          }}
         >
           Create Note
         </button>
@@ -85,4 +84,6 @@ export default function NotesClient({
       )}
     </section>
   );
-}
+};
+
+export default NotesClient;

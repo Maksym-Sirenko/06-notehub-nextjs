@@ -28,6 +28,7 @@ export const fetchNotes = async ({
   perPage?: number;
 } = {}): Promise<FetchNotesResponse> => {
   await new Promise((resolve) => setTimeout(resolve, 2000));
+
   const { data } = await axios.get(
     'https://notehub-public.goit.study/api/notes',
     {

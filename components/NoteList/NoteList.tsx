@@ -17,13 +17,18 @@ const NoteList = ({ notes }: NoteListProps) => {
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteNote(id),
-    onMutate: (id: string) => setDeletingId(id),
+    onMutate: (id: string) => {
+      setDeletingId(id);
+    },
     onSettled: () => setDeletingId(null),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
   });
 
   const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this note?')) {
+    if (
+      typeof window !== 'undefined' &&
+      window.confirm('Are you sure you want to delete this note?')
+    ) {
       deleteMutation.mutate(id);
     }
   };

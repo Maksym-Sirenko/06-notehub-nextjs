@@ -2,7 +2,7 @@
 //   return <p>Loading, please wait...</p>;
 // }
 
-export default function Loading() {
+const Loading = () => {
   return (
     <div
       style={{
@@ -15,4 +15,6 @@ export default function Loading() {
       🔄 Loading, please wait...
     </div>
   );
-}
+};
+
+export default Loading;

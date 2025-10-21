@@ -5,7 +5,7 @@ import { fetchNoteById } from '@/lib/api';
 import type { Note } from '@/types/note';
 import css from './NoteDetails.module.css';
 
-export default function NoteDetailsClient({ noteId }: { noteId: string }) {
+const NoteDetailsClient = ({ noteId }: { noteId: string }) => {
   const isValidId = !!noteId;
 
   const {
@@ -38,4 +38,6 @@ export default function NoteDetailsClient({ noteId }: { noteId: string }) {
       </div>
     </div>
   );
-}
+};
+
+export default NoteDetailsClient;

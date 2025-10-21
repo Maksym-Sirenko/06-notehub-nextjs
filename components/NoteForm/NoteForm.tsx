@@ -1,10 +1,12 @@
+'use client';
+
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import type { FormikHelpers } from 'formik';
-import type { NoteTag } from '../../types/note';
+import type { NoteTag } from '@/types/note';
 import * as Yup from 'yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useId } from 'react';
-import { createNote } from '../../lib/api';
+import { createNote } from '@/lib/api';
 import css from './NoteForm.module.css';
 
 const TAGS = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'] as const;
