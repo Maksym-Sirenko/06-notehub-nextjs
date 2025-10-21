@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import SearchBox from '@/components/SearchBox/SearchBox';
-import NoteList from '@/components/NoteList/NoteList';
-import Pagination from '@/components/Pagination/Pagination';
-import NoteForm from '@/components/NoteForm/NoteForm';
-import Modal from '@/components/Modal/Modal';
+import SearchBox from '@/app/components/SearchBox/SearchBox';
+import NoteList from '@/app/components/NoteList/NoteList';
+import Pagination from '@/app/components/Pagination/Pagination';
+import NoteForm from '@/app/components/NoteForm/NoteForm';
+import Modal from '@/app/components/Modal/Modal';
 import { fetchNotes } from '@/lib/api';
 import type { FetchNotesResponse } from '@/lib/api';
 import css from './Notes.client.module.css';
