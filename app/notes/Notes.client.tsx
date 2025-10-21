@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useDebouncedCallback } from 'use-debounce';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import NoteList from '@/components/NoteList/NoteList';
 import Pagination from '@/components/Pagination/Pagination';
@@ -18,23 +19,25 @@ interface Props {
 
 const NotesClient = ({ initialSearch = '', initialPage = 1 }: Props) => {
   const [search, setSearch] = useState(initialSearch);
+  const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
   const [page, setPage] = useState(initialPage);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (search !== initialSearch) {
-        setPage(1);
-      }
-    }, 500);
+  const debounced = useDebouncedCallback((value: string) => {
+    setDebouncedSearch(value);
+    setPage(1);
+  }, 500);
 
-    return () => clearTimeout(timer);
-  }, [search, initialSearch]);
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearch(value);
+    debounced(value);
+  };
 
   const { data, isLoading, isError } = useQuery<FetchNotesResponse, Error>({
-    queryKey: ['notes', search, page],
-    queryFn: () => fetchNotes({ search, page }),
+    queryKey: ['notes', debouncedSearch, page],
+    queryFn: () => fetchNotes({ search: debouncedSearch, page }),
     placeholderData: (previousData) => previousData,
   });
 
@@ -49,7 +52,7 @@ const NotesClient = ({ initialSearch = '', initialPage = 1 }: Props) => {
   return (
     <section className={css.section}>
       <div className={css.header}>
-        <SearchBox value={search} onChange={(e) => setSearch(e.target.value)} />
+        <SearchBox value={search} onChange={handleSearchChange} />
         <button
           className={css.createButton}
           onClick={() => {

@@ -29,7 +29,7 @@ export const fetchNotes = async ({
 } = {}): Promise<FetchNotesResponse> => {
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  const { data } = await axios.get(
+  const { data } = await axios.get<FetchNotesResponse>(
     'https://notehub-public.goit.study/api/notes',
     {
       params: { search, page, perPage },
@@ -44,16 +44,16 @@ export const createNote = async (newNote: {
   content: string;
   tag: string;
 }) => {
-  const { data } = await NoteService.post('', newNote);
+  const { data } = await NoteService.post<Note>('', newNote);
   return data as Note;
 };
 
 export const deleteNote = async (noteId: string) => {
-  const { data } = await NoteService.delete(`/${noteId}`);
+  const { data } = await NoteService.delete<Note>(`/${noteId}`);
   return data as Note;
 };
 
 export const fetchNoteById = async (noteId: string): Promise<Note> => {
-  const { data } = await NoteService.get(`/${noteId}`);
+  const { data } = await NoteService.get<Note>(`/${noteId}`);
   return data;
 };

@@ -1,35 +1,24 @@
-'use client';
-
-import { useQuery } from '@tanstack/react-query';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { getQueryClient } from '@/lib/getQueryClient';
 import { fetchNoteById } from '@/lib/api';
-import type { Note } from '@/types/note';
-import css from './NoteDetails.module.css';
+import NoteDetailsClient from './NoteDetails.client';
 
-const NoteDetailsClient = ({ noteId }: { noteId: string }) => {
-  const {
-    data: note,
-    isLoading,
-    isError,
-  } = useQuery<Note, Error>({
-    queryKey: ['note', noteId],
-    queryFn: () => fetchNoteById(noteId),
+export default async function NoteDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['note', id],
+    queryFn: () => fetchNoteById(id),
   });
 
-  if (isLoading) return <p>Loading note details...</p>;
-  if (isError) return <p>Something went wrong.</p>;
-  if (!note) return <p>Note not found</p>;
-
   return (
-    <div className={css.container}>
-      <div className={css.item}>
-        <div className={css.header}>
-          <h2>{note.title}</h2>
-        </div>
-        <p className={css.content}>{note.content}</p>
-        <p className={css.date}>{note.createdAt}</p>
-      </div>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NoteDetailsClient noteId={id} />
+    </HydrationBoundary>
   );
-};
-
-export default NoteDetailsClient;
+}
